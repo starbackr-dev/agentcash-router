@@ -15,6 +15,8 @@ export interface MppxContextArgs {
   sessionEnabled: boolean;
   sharedSessionParams: Record<string, unknown>;
   realm: string;
+  /** picocash charge method to compose alongside tempo.charge (optional). */
+  picocashMethod?: import('mppx').Method.AnyServer;
 }
 
 type ChargeMethod = MppxMiddleware<{ amount: string }, Transport.Http>;
@@ -63,6 +65,9 @@ export function getMppxRequestContext(args: MppxContextArgs): MppxRequestContext
             } as unknown as Parameters<typeof tempo.session>[0]),
           ]
         : []),
+      // picocash rides in the same Mppx.create array: mppx composes it into the
+      // shared `charge` intent, so one 402 advertises tempo + picocash together.
+      ...(args.picocashMethod ? [args.picocashMethod] : []),
     ] as Parameters<typeof Mppx.create>[0]['methods'],
     secretKey: mppConfig.secretKey,
     realm,

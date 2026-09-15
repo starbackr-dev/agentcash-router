@@ -26,9 +26,10 @@ import {
   type MppSessionToken,
 } from './session-mode.js';
 import { settleTxMode, verifyTxMode, type TxModeToken } from './transaction-mode.js';
+import { settlePicocashMode, verifyPicocashMode, type PicocashModeToken } from './picocash-mode.js';
 import { settleHashMode, verifyHashMode, type HashModeToken } from './hash-mode.js';
 
-type AnyMppToken = TxModeToken | HashModeToken | MppSessionToken;
+type AnyMppToken = TxModeToken | HashModeToken | MppSessionToken | PicocashModeToken;
 
 export const mppStrategy: PaymentStrategy = {
   protocol: 'mpp',
@@ -53,6 +54,10 @@ export const mppStrategy: PaymentStrategy = {
 
     if (info.sessionAction) return { ok: false, kind: 'invalid' };
 
+    if (info.payloadType === 'proofs') {
+      return verifyPicocashMode(args, info);
+    }
+
     const deferTransactionSettlement =
       info.payloadType === 'transaction' &&
       args.deps.tempoClient &&
@@ -67,6 +72,7 @@ export const mppStrategy: PaymentStrategy = {
   async settle(args: SettleArgs): Promise<SettleOutcome> {
     const token = args.token as AnyMppToken;
     if (token.mode === 'session') return settleSessionMode(args);
+    if (token.mode === 'picocash') return settlePicocashMode(args);
     if (token.mode === 'transaction') return settleTxMode(args);
     return settleHashMode(args);
   },

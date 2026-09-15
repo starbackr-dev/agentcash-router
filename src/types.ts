@@ -492,6 +492,18 @@ export interface RouterConfig {
     feePayerKey?: string;
     /** Partial override of mppx's sponsor fee-budget ceilings for fee-sponsored Tempo transactions (charge co-signs and session open/topUp/close). Raise `maxTotalFee` alongside `maxGas`/`maxFeePerGas`. Omit for mppx's per-chain defaults. */
     feePayerPolicy?: MppFeePayerPolicy;
+    /**
+     * Enables the picocash eCash charge method alongside tempo. When set, the
+     * router advertises `method="picocash"` on charge 402s and settles those
+     * credentials by swapping proofs at the mint (settle-first). picocash needs
+     * no payee/operator key on the server — settlement is a mint HTTP call, not
+     * an on-chain transfer. The mint's keyset, unit, and chain are read from
+     * `GET {mintUrl}/v1/keys` at init.
+     */
+    picocash?: {
+      /** picocash mint base URL, e.g. `https://mint.picocash.dev`. */
+      mintUrl: string;
+    };
     /** Enables MPP payment-channel sessions for `.session()` routes (registers both request and SSE session middleware). Also requires `mpp.operatorKey`. */
     session?: {
       /** Suggested deposit on the 402 challenge = `unitCost × depositMultiplier` USDC. Route `maxPrice` overrides. @default 10 */

@@ -171,6 +171,7 @@ export function createRouter<P extends Record<string, string> | undefined = unde
     kvStore,
     mppx: null,
     tempoClient: null,
+    picocashMethod: null,
     mppSessionConfig:
       config.mpp?.session && config.mpp.operatorKey
         ? { depositMultiplier: config.mpp.session.depositMultiplier ?? 10 }
@@ -186,6 +187,7 @@ export function createRouter<P extends Record<string, string> | undefined = unde
     const mppResult = await initMpp(config, resolvedBaseUrl, kvStore, mppConfigError);
     deps.mppx = mppResult.mppx ?? null;
     deps.tempoClient = mppResult.tempoClient ?? null;
+    deps.picocashMethod = mppResult.picocashMethod ?? null;
     if (mppResult.initError) {
       deps.mppInitError = mppResult.initError;
       console.error(`[router] MPP initialization failed: ${mppResult.initError}`);

@@ -4,6 +4,7 @@ import type { RouterDeps } from '../protocols/types.js';
 import type { KvStore } from '../kv-store/index.js';
 import { firePluginHook, type PluginContext, type RouterPlugin } from '../plugin/index.js';
 import { getMppxRequestContext, getMppxStreamingContext } from './mppx.js';
+import { initPicocash } from './picocash.js';
 import { createKvMppStore } from '../kv-store/index.js';
 import { DEFAULT_TEMPO_RPC_URL } from '../constants.js';
 
@@ -12,6 +13,7 @@ type MppxField = NonNullable<RouterDeps['mppx']>;
 export interface MppInitResult {
   mppx?: MppxField;
   tempoClient?: Client;
+  picocashMethod?: import('mppx').Method.AnyServer;
   initError?: string;
 }
 
@@ -67,6 +69,12 @@ export async function initMpp(
         ? { settlementSchedule: mppConfig.session.settlementSchedule }
         : {}),
     };
+    // picocash: build the charge method from the mint URL (keyset/unit/chain
+    // are read from the mint). Shares the KV store as its replay AcceptorStore.
+    const picocash = mppConfig.picocash
+      ? await initPicocash(mppConfig.picocash, realm, kvStore)
+      : undefined;
+
     const mppxArgs = {
       Mppx,
       tempo,
@@ -78,6 +86,7 @@ export async function initMpp(
       sessionEnabled,
       sharedSessionParams,
       realm,
+      ...(picocash ? { picocashMethod: picocash.method } : {}),
     };
     const primary = getMppxRequestContext(mppxArgs);
     const streaming = getMppxStreamingContext(mppxArgs);
@@ -89,7 +98,7 @@ export async function initMpp(
       ...(streaming?.session ? { sessionStream: streaming.session } : {}),
     };
 
-    return { mppx, tempoClient };
+    return { mppx, tempoClient, ...(picocash ? { picocashMethod: picocash.method } : {}) };
   } catch (err) {
     return { initError: err instanceof Error ? err.message : String(err) };
   }

@@ -1,7 +1,7 @@
 import type { Credential } from 'mppx';
 import { normalizeWalletAddress } from '../../auth/normalize-wallet.js';
 
-export type MppPayloadType = 'transaction' | 'hash' | 'unknown';
+export type MppPayloadType = 'transaction' | 'hash' | 'proofs' | 'unknown';
 
 export type MppSessionAction = 'open' | 'topUp' | 'voucher' | 'close';
 
@@ -24,7 +24,13 @@ export async function readMppCredential(request: Request): Promise<MppCredential
   const payload = credential.payload as { type?: string; action?: string } | null;
   const rawType = payload?.type;
   const payloadType: MppPayloadType =
-    rawType === 'transaction' ? 'transaction' : rawType === 'hash' ? 'hash' : 'unknown';
+    rawType === 'transaction'
+      ? 'transaction'
+      : rawType === 'hash'
+        ? 'hash'
+        : rawType === 'proofs'
+          ? 'proofs'
+          : 'unknown';
 
   const rawAction = payload?.action;
   const sessionAction =

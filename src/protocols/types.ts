@@ -44,6 +44,8 @@ export interface RouterDeps {
       Transport.Sse
     >;
   } | null;
+  /** picocash charge method (mppx server method), present when mpp.picocash is configured. Used for the offline validate pre-check; settlement rides the shared `mppx.charge` compose. */
+  picocashMethod?: import('mppx').Method.AnyServer | null;
   mppSessionConfig?: { depositMultiplier: number } | null;
   tempoClient?: import('viem').Client | null;
 }
