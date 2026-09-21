@@ -12,11 +12,11 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0(bufferutil@4.1.0)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.9.3)(utf-8-validate@5.0.10)
       '@picocash/mppx-method':
-        specifier: link:/home/ubuntu/source/picocash/packages/mppx-method
-        version: link:../../../../../../home/ubuntu/source/picocash/packages/mppx-method
+        specifier: ^0.1.0
+        version: 0.1.0(mppx@0.8.19(@modelcontextprotocol/sdk@1.26.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(express@5.2.1)(hono@4.12.28)(typescript@5.9.3)(viem@2.54.6(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.6)))
       '@picocash/sdk':
-        specifier: link:/home/ubuntu/source/picocash/packages/sdk
-        version: link:../../../../../../home/ubuntu/source/picocash/packages/sdk
+        specifier: ^0.1.0
+        version: 0.1.0
       '@x402/core':
         specifier: ^2.17.0
         version: 2.17.0
@@ -859,6 +859,20 @@ packages:
     resolution: {integrity: sha512-6hIU3RQu45B+VNTY4Ru8ppFwjVS/S5qwYyGhBotmjxfEKk41I2DlGtRfGJndZ5+6lneE2pwloqunlOyZuX/XAw==}
     cpu: [x64]
     os: [win32]
+
+  '@picocash/crypto@0.1.0':
+    resolution: {integrity: sha512-ZdPUZ0ZacmtxjDnVlWq/vahAP5O2QHl7xzSkm55DFrwGi8uWi28A9COuA5tqPCWSncSac2m7DCPkha9+LHtWgw==}
+
+  '@picocash/mppx-method@0.1.0':
+    resolution: {integrity: sha512-WeUc8TJbd9dZHCocseXA2YdmWRcI6vs9fhTT7OG7Zt5Shcoh9ZSnwzAEtz8M7P8FYVjbCW6cozz5ujHxTfez/A==}
+    peerDependencies:
+      mppx: '>=0.8.0'
+    peerDependenciesMeta:
+      mppx:
+        optional: true
+
+  '@picocash/sdk@0.1.0':
+    resolution: {integrity: sha512-4FYdMQioKBFAbDnF7UxOtD6gtucMV+2lEMw/WYHWKLQrCTO/mFshXTB3u3DSw71zm6T+kQISLL1Oa80ySU8UTg==}
 
   '@rollup/rollup-android-arm-eabi@4.57.1':
     resolution: {integrity: sha512-A6ehUVSiSaaliTxai040ZpZ2zTevHYbvu/lDoeAteHI8QnaosIzm4qwtezfRg1jOYaUmnzLX1AOD6Z+UJjtifg==}
@@ -3816,6 +3830,24 @@ snapshots:
 
   '@oxc-resolver/binding-win32-x64-msvc@11.19.1':
     optional: true
+
+  '@picocash/crypto@0.1.0':
+    dependencies:
+      '@noble/curves': 1.9.7
+      '@noble/hashes': 1.8.0
+
+  '@picocash/mppx-method@0.1.0(mppx@0.8.19(@modelcontextprotocol/sdk@1.26.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(express@5.2.1)(hono@4.12.28)(typescript@5.9.3)(viem@2.54.6(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.6)))':
+    dependencies:
+      '@picocash/crypto': 0.1.0
+      '@picocash/sdk': 0.1.0
+      zod: 4.4.3
+    optionalDependencies:
+      mppx: 0.8.19(@modelcontextprotocol/sdk@1.26.0(@cfworker/json-schema@4.1.1)(zod@4.3.6))(express@5.2.1)(hono@4.12.28)(typescript@5.9.3)(viem@2.54.6(bufferutil@4.1.0)(typescript@5.9.3)(utf-8-validate@5.0.10)(zod@4.3.6))
+
+  '@picocash/sdk@0.1.0':
+    dependencies:
+      '@noble/hashes': 1.8.0
+      '@picocash/crypto': 0.1.0
 
   '@rollup/rollup-android-arm-eabi@4.57.1':
     optional: true

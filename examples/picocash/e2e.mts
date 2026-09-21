@@ -8,7 +8,7 @@
  * needs PICOCASH_E2E_PAYER_KEY in env (a faucet-funded testnet key).
  */
 import { serve } from '@hono/node-server';
-import { createRouter } from './src/index.js';
+import { createRouter } from '../../src/index.js';
 import { Fetch } from 'mppx/client';
 import { Wallet, sumProofs, type Proof } from '@picocash/sdk';
 import { picocash } from '@picocash/mppx-method/mppx';
